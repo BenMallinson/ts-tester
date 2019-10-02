@@ -1,0 +1,142 @@
+version: 2 # use CircleCI 2.0
+
+references:
+  js-env: &js-env
+    docker:
+      - image: circleci/node:12.4.0
+    working-directory: ~/ts-web-app-starter
+  restore-node-modules: &restore-node-modules
+    restore-cache:
+      key: node-modules-{{ checksum "yarn.lock" }}
+  save-node-modules: &save-node-modules
+    save-cache:
+      key: node-modules-{{ checksum "yarn.lock" }}
+      paths:
+        - ./node_modules
+
+jobs:
+  #
+  # Setup jobs
+  #
+  setup:
+    <<: *js-env
+    steps:
+      - checkout
+      - *restore-node-modules
+      - run:
+          name: js:install
+          command: yarn
+      - *save-node-modules
+  #
+  # Client jobs
+  #
+  lint:client:
+    <<: *js-env
+    steps:
+      - checkout
+      - *restore-node-modules
+      - run:
+          name: js:lint:client
+          command: yarn lint:client
+      - *save-node-modules
+  tsc:client:
+    <<: *js-env
+    steps:
+      - checkout
+      - *restore-node-modules
+      - run:
+          name: js:tsc:client
+          command: yarn tsc:client
+      - *save-node-modules
+  test:client:
+    <<: *js-env
+    steps:
+      - checkout
+      - *restore-node-modules
+      - run:
+          name: js:test:client
+          command: yarn test:client
+      - *save-node-modules
+  #
+  # Server jobs
+  #
+  lint:server:
+    <<: *js-env
+    steps:
+      - checkout
+      - *restore-node-modules
+      - run:
+          name: js:lint:server
+          command: yarn lint:server
+      - *save-node-modules
+  tsc:server:
+    <<: *js-env
+    steps:
+      - checkout
+      - *restore-node-modules
+      - run:
+          name: js:tsc:server
+          command: yarn tsc:server
+      - *save-node-modules
+  test:server:
+    <<: *js-env
+    steps:
+      - checkout
+      - *restore-node-modules
+      - run:
+          name: js:test:server
+          command: yarn test:server
+      - *save-node-modules
+  #
+  # Code Coverage
+  #
+  test:coverage:
+    <<: *js-env
+    steps:
+      - checkout
+      - *restore-node-modules
+      - run:
+          name: test
+          command: yarn test --coverage
+      - run:
+          name: codecov
+          command: yarn codecov -f coverage/*.json
+workflows:
+  version: 2
+  js-ci:
+    jobs:
+      - setup
+      #
+      # Client steps
+      #
+      - lint:client:
+          requires:
+            - setup
+      - tsc:client:
+          requires:
+            - setup
+      - test:client:
+          requires:
+            - setup
+            - tsc:client
+      #
+      #
+      #
+      - lint:server:
+          requires:
+            - setup
+      - tsc:server:
+          requires:
+            - setup
+      - test:server:
+          requires:
+            - setup
+            - tsc:server
+      #
+      # Code Coverage
+      #
+      - test:coverage:
+          requires:
+            - setup
+            - test:client
+            - test:server

@@ -1,0 +1,11 @@
+{
+  "include": [
+    "src/server/**/*"
+  ],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "lib": ["es2018"],
+    "sourceMap": true,
+    "resolveJsonModule": true
+  }
+}

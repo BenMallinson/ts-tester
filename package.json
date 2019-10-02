@@ -1,0 +1,53 @@
+{
+  "name": "ts-web-app-starter",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "parcel build src/client/index.tsx",
+    "lint": "run-p lint:client lint:server",
+    "lint:client": "eslint src/client --ext .ts,.tsx",
+    "lint:server": "eslint src/server --ext .ts",
+    "start": "run-p start:client start:server",
+    "start:client": "parcel src/client/index.tsx",
+    "start:server": "ts-node -P tsconfig.server.json src/server/index.ts",
+    "test": "jest",
+    "test:client": "cross-env JEST_PROJECT=client jest",
+    "test:server": "cross-env JEST_PROJECT=server jest",
+    "tsc": "run-p tsc:client tsc:server",
+    "tsc:client": "tsc --noEmit -p tsconfig.client.json",
+    "tsc:server": "tsc --noEmit -p tsconfig.server.json"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "@testing-library/dom": "^5.2.0",
+    "@testing-library/react": "^8.0.1",
+    "@types/jest": "^24.0.14",
+    "@types/node": "^12.0.8",
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "@typescript-eslint/eslint-plugin": "^1.9.0",
+    "@typescript-eslint/parser": "^1.9.0",
+    "codecov": "^3.5.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "jest": "^24.8.0",
+    "npm-run-all": "^4.1.5",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "^1.18.2",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "fastify": "^2.5.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  }
+}
